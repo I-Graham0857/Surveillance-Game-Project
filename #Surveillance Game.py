@@ -81,15 +81,15 @@ class Player:
 
 def Utility(t1, t2, t3, player):
     #Find utility of each action
-    scan1Util = .25 * (t1.risk) + t1.scanTime - (6 + .5 * (t2.risk + t3.risk))
-    scan2Util = .25 * (t1.risk) + t2.scanTime - (6 + .5 * (t3.risk + t1.risk))
-    scan3Util = .25 * (t1.risk) + t3.scanTime - (6 + .5 * (t2.risk + t1.risk))
+    scan1Util = .25 * (t1.risk) + .01 * t1.scanTime**3 - (6 + .5 * (t2.risk + t3.risk))
+    scan2Util = .25 * (t2.risk) + .01 * t2.scanTime**3 - (6 + .5 * (t3.risk + t1.risk))
+    scan3Util = .25 * (t3.risk) + .01 * t3.scanTime**3 - (6 + .5 * (t2.risk + t1.risk))
 
     repel1Util = t1.risk - (20 + .5 * (t2.risk + t3.risk))
     repel2Util = t2.risk - (20 + .5 * (t3.risk + t1.risk))
     repel3Util = t3.risk - (20 + .5 * (t2.risk + t1.risk))
 
-    idleUtil = -1 * (.33 * (t1.risk) + .33 * (t2.risk) + .33 * (t3.risk))
+    idleUtil = -.66 * (.33 * (t1.risk) + .33 * (t2.risk) + .33 * (t3.risk))
 
     #Find highest utility action
     if (scan1Util >= scan2Util and scan1Util >= scan3Util and scan1Util >= idleUtil and scan1Util >= repel1Util and scan1Util >= repel2Util and scan1Util >= repel3Util):
@@ -101,7 +101,6 @@ def Utility(t1, t2, t3, player):
     elif (scan3Util >= scan1Util and scan3Util >= scan2Util and scan3Util >= idleUtil and scan3Util >= repel1Util and scan3Util >= repel2Util and scan3Util >= repel3Util):
         print("Scan 3: Utility = " + str(scan3Util))
         player.Scan(t3)
-
     elif (repel1Util >= repel2Util and repel1Util >= repel3Util and repel1Util >= scan1Util and repel1Util >= scan2Util and repel1Util >= scan3Util and repel1Util >= idleUtil):
         print("Repel 1: Utility = " + str(repel1Util))
         player.Repel(t1)
@@ -144,3 +143,6 @@ for x in range(50):
     if (Ai.power < 0):
         print("You ran out of power")
         break
+
+    if (x == 49):
+        print("You win")
